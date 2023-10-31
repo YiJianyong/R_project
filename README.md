@@ -8,7 +8,9 @@
 -->
 # DNA甲基化
 
-## 甲基化芯片数据处理
+## 甲基化芯片数据上游处理
+
+[甲基化芯片的一般分析流程](https://mp.weixin.qq.com/s/JHrL_DqgQY6Yh18vHySKYg)
 
 
 
