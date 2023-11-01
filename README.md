@@ -6,7 +6,8 @@
  * @Description: 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  * @FilePath: \Markdowne:\Windows-SSD\Program Files (x86)\Common Files\Designer\R_teamwork\R_project\R_project\README.md
 -->
-# DNA甲基化
+
+# DNA甲基化分析
 
 ## 甲基化芯片数据上游处理
 
@@ -14,7 +15,7 @@
 
 ### 1.数据下载
 [数据库中数据规律及处理函数](https://mp.weixin.qq.com/s?__biz=MzAxMDkxODM1Ng==&amp;mid=2247486063&amp;idx=1&amp;sn=156bee5397e979722b36b78284188538&amp;scene=21#wechat_redirect)
-+ 下载最原始的芯片数据，根据不同芯片在处理成表达矩阵
++ 下载最原始的芯片数据，根据不同芯片再处理成表达矩阵
   + 数据库获取：GEO   TCGA
   + 使用GDS号下载的数据需要用**Table()函数**处理得到表达矩阵、用**Meta()函数**得到描述信息、GDS2eSet()函数把它转换成expression set对象
   + 使用GSE号返回的对象就是expression set对象，常用处理函数：geneNames/sampleNames/pData/**exprs**
@@ -40,8 +41,29 @@ downGSE <- function(studyID = "GSE1009", destdir = ".") {
 
 ### 2.数据预处理
 + 对原始芯片数据进行处理取决于芯片的平台：这里主要介绍主流的illumina相关芯片
-  + 
+  + 用lumi包处理bead系列表达芯片
 
+```
+library(lumi)
+fileName <- 'GSE30669_HEK_Sample_Probe_Profile.txt' # Not Run
+x.lumi <- lumiR.batch(fileName) ##, sampleInfoFile='sampleInfo.txt')
+pData(phenoData(x.lumi))
+## Do all the default preprocessing in one step
+lumi.N.Q <- lumiExpresso(x.lumi)
+### retrieve normalized data
+dataMatrix <- exprs(lumi.N.Q)
+```
+  + 从GEO数据库中直接下载的数据
+
+```
+library(GEOquery)
+library(limma)
+GSE30669 <- getGEO('GSE30669', destdir=".",getGPL = F)
+exprSet=exprs(GSE30669[[1]])
+GSE30669[[1]]
+pdata=pData(GSE30669[[1]])
+exprSet=exprs(GSE30669[[1]])
+```
 
 + 质量控制
 
